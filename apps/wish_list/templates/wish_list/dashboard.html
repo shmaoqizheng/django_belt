@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Dashboard</title>
+	</head>
+	<body>
+		<a href="/dashboard">Home</a>
+		<a href="/logout">Logout</a>
+		<h3>Hello, {{request.session.user}}</h3>
+		Your wish list: <br>
+		<table>
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th>Added by</th>
+					<th>Date Added</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for wish in wishes %}
+				<tr>
+					<td><a href="/wish_items/{{wish.id}}">{{wish.item}}</a></td>
+					<td>{{wish.created_by.name}}</td>
+					<td>{{wish.created_at}}</td>
+					{% if wish.created_by.name == request.session.user %}
+					<td><a href="/delete/{{wish.id}}">Delete</a></td>
+					{% else %}
+					<td><a href="/remove/{{wish.id}}">Remove from my Wishlist</a></td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		Other users' wish list: <br>
+		<table>
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th>Added by</th>
+					<th>Date Added</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for wish in others %}
+				<tr>
+					<td><a href="/wish_items/{{wish.id}}">{{wish.item}}</a></td>
+					<td>{{wish.created_by.name}}</td>
+					<td>{{wish.created_at}}</td>
+					<td><a href="/add/{{wish.id}}">Add to my Wishlist</a></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<a href="/create">Add Item</a>
+	</body>
+</html>
